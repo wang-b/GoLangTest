@@ -8,10 +8,12 @@
         <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
     </head>
     <body>
-        <a href="/upload">上传文件</a>
+        <a href="/picture/upload">上传文件</a>
+        <a href="/user">用户列表</a>
         <ol>
             {{range $.images}}
-            <li><a href="/view?id={{.|urlquery}}" target="_blank">{{.|html}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/delete?id={{.|urlquery}}">delete</a></li>
+            <li><a href="/picture/view?id={{.|urlquery}}" target="_blank">{{.|html}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="/picture/delete?id={{.|urlquery}}">delete</a></li>
             {{end}}
         </ol>
     </body>

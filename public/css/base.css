@@ -1,0 +1,10 @@
+* {margin: 0; padding: 0}
+
+body {
+    text-align: center;
+    padding-top: 30px;
+}
+
+.form-row {
+    margin-top: 5px;
+}

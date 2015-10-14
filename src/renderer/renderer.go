@@ -11,6 +11,9 @@ import (
 	"../config"
 )
 
+//模板文件扩展名
+const TEMPLATE_EXT = ".html"
+
 //模板缓存
 var templates = make(map[string]*template.Template)
 
@@ -19,22 +22,43 @@ var templates = make(map[string]*template.Template)
  */
 func init() {
 	//加载并缓存模板文件
-	fileInfos, err := ioutil.ReadDir(config.TEMPLATE_DIR)
-	if err != nil {
-		log.Println("templates not found...")
+	loadTemplates(templates, config.TEMPLATE_DIR, "", TEMPLATE_EXT)
+}
+
+/*
+ * 递归装载对应目录下所有的模板文件
+ * @param container 用于缓存模板a
+ * @param templatePath 目录
+ * @param prefix 模板名称前缀
+ * @param ext 模板文件后缀名
+ */
+func loadTemplates(container map[string]*template.Template, templateDir string, prefix string, ext string) {
+	log.Println("scan dir： " + templateDir)
+	fileInfos, err := ioutil.ReadDir(templateDir)
+	if err != nil {  //如果没有模板，直接返回
 		return
 	}
 
-	var templateName, templatePath string
+	var name, tmplPath, tmplName string
 	for _, fileInfo := range fileInfos {
-		templateName = fileInfo.Name()
-		if ext := path.Ext(templateName); ext != ".html" {
-			continue
+		name = fileInfo.Name()
+
+		tmplPath = templateDir + "/" + name
+		tmplName = name
+		if prefix != "" {
+			tmplName = prefix + "/" + name
 		}
-		templatePath = config.TEMPLATE_DIR + "/" + templateName
-		log.Println("Loading template: ", templatePath)
-		tmpl := template.Must(template.ParseFiles(templatePath))
-		templates[templateName] = tmpl
+
+		if fileInfo.IsDir() {  //如果是文件夹，递归加载
+			loadTemplates(container, tmplPath, tmplName, ext)
+		} else {
+			if suffix := path.Ext(name); suffix != ext {
+				continue
+			}
+			log.Println("loading template： " + tmplName)
+			tmpl := template.Must(template.ParseFiles(tmplPath))  //模板编译失败，会报错
+			container[tmplName] = tmpl
+		}
 	}
 }
 
@@ -45,8 +69,8 @@ func init() {
  * @param data 模板数据
  */
 func RenderHtml(respWriter http.ResponseWriter, tmpl string, data map[string]interface{}) {
-	if ok := strings.HasSuffix(tmpl, ".html"); !ok {
-		tmpl = tmpl + ".html"
+	if ok := strings.HasSuffix(tmpl, TEMPLATE_EXT); !ok {
+		tmpl = tmpl + TEMPLATE_EXT
 	}
 	htmlTmpl, ok := templates[tmpl]
 	if ok {

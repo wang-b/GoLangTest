@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>用户列表</title>
+        <link rel="shortcut icon" href="/static/favicon.ico" />
+        <link type="text/css" rel="stylesheet" href="/static/css/base.css">
+        <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <div>
+            <p>用户列表</p>
+            <a href="/user/add">添加</a>
+        </div>
+        <table width="900px" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>用户名</td>
+                    <td>密码</td>
+                    <td>昵称</td>
+                    <td>真实名称</td>
+                    <td>邮箱</td>
+                    <td>手机</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{range $.users}}
+                <tr>
+                    <td>{{.Id|html}}</td>
+                    <td>{{.Username|html}}</td>
+                    <td>{{.Password|html}}</td>
+                    <td>{{.Nickname|html}}</td>
+                    <td>{{.Realname|html}}</td>
+                    <td>{{.Email|html}}</td>
+                    <td>{{.Mobile|html}}</td>
+                    <td>
+
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -14,11 +14,11 @@ import (
 	"strings"
 )
 
-type MainRouter struct {
+type PictureRouter struct {
 
 }
 
-func (r *MainRouter) Routes() map[string]http.HandlerFunc {
+func (r *PictureRouter) Routes() map[string]http.HandlerFunc {
 	routes := make(map[string]http.HandlerFunc)
 	routes["/upload"] = r.uploadHandler()
 	routes["/view"] = r.viewHandler()
@@ -26,7 +26,7 @@ func (r *MainRouter) Routes() map[string]http.HandlerFunc {
 	return  routes
 }
 
-func (r *MainRouter) uploadHandler() http.HandlerFunc {
+func (r *PictureRouter) uploadHandler() http.HandlerFunc {
 	return func (respWriter http.ResponseWriter, request *http.Request) {
 		if request.Method == "GET" {
 			renderer.RenderHtml(respWriter, "upload", nil)
@@ -49,12 +49,12 @@ func (r *MainRouter) uploadHandler() http.HandlerFunc {
 			_, e := io.Copy(temp, file)
 			router.CheckError(e)
 
-			http.Redirect(respWriter, request, "/" + fName, http.StatusFound)
+			http.Redirect(respWriter, request, "/", http.StatusFound)
 		}
 	}
 }
 
-func (r *MainRouter) viewHandler() http.HandlerFunc {
+func (r *PictureRouter) viewHandler() http.HandlerFunc {
 	return func (respWriter http.ResponseWriter, request *http.Request) {
 		imageId := request.FormValue("id")
 		imagePath := config.UPLOAD_DIR + "/" + imageId
@@ -68,7 +68,7 @@ func (r *MainRouter) viewHandler() http.HandlerFunc {
 	}
 }
 
-func (r *MainRouter)deleteHandler() http.HandlerFunc {
+func (r *PictureRouter)deleteHandler() http.HandlerFunc {
 	return func (respWriter http.ResponseWriter, request *http.Request) {
 		imageId := request.FormValue("id");
 		imagePath := config.UPLOAD_DIR + "/" + imageId
@@ -84,6 +84,6 @@ func (r *MainRouter)deleteHandler() http.HandlerFunc {
 		}
 
 		//刷新页面
-		http.Redirect(respWriter, request,"/", http.StatusFound)
+		http.Redirect(respWriter, request, "/", http.StatusFound)
 	}
 }

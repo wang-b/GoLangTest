@@ -35,10 +35,13 @@ func staticResHandler(mux *http.ServeMux, prefix string, staticDir string) {
 
 func route(serveMux *http.ServeMux) {
 	var rIndex router.Router
-	var rMain router.Router
+	var rPicture router.Router
+	var rUser router.Router
 	rIndex = new(routes.IndexRouter)
-	rMain = new(routes.MainRouter)
+	rPicture = new(routes.PictureRouter)
+	rUser = new(routes.UserRouter)
 
 	router.Route(serveMux, "/", rIndex)
-	router.Route(serveMux, "/", rMain)
+	router.Route(serveMux, "/picture", rPicture)
+	router.Route(serveMux, "/user", rUser)
 }
