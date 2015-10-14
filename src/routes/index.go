@@ -6,6 +6,7 @@ import (
 	"../config"
 	"../renderer"
 	"./router"
+	"strings"
 )
 
 type IndexRouter struct {
@@ -26,6 +27,9 @@ func (r *IndexRouter) indexHandler() http.HandlerFunc {
 		data := make(map[string]interface{})
 		images := []string{}
 		for _, fileInfo := range fileInfos {
+			if strings.EqualFold(fileInfo.Name(), ".gitkeep") {
+				continue
+			}
 			images = append(images, fileInfo.Name())
 		}
 		data["images"] = images
