@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"../config"
 	"../renderer"
-	"./router"
 	"strings"
+	. "../common"
 )
 
 type IndexRouter struct {
@@ -22,7 +22,7 @@ func (r *IndexRouter) Routes() map[string]http.HandlerFunc {
 func (r *IndexRouter) indexHandler() http.HandlerFunc {
 	return func (respWriter http.ResponseWriter, request *http.Request) {
 		fileInfos, err := ioutil.ReadDir(config.UPLOAD_DIR)
-		router.CheckError(err)
+		CheckError(err)
 
 		data := make(map[string]interface{})
 		images := []string{}

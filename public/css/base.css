@@ -8,3 +8,7 @@ body {
 .form-row {
     margin-top: 5px;
 }
+
+td {padding: 5px;}
+thead td {color: #1e322b;}
+tbody td {color: #1593ff;}

@@ -8,36 +8,58 @@
         <script type="text/javascript" src="/static/js/jquery-2.1.1.min.js"></script>
     </head>
     <body>
-        <p>用户</p>
-        <form method="post" action="/user/add">
+        <p>用户信息</p>
+        <form method="post" action="/user/update">
+            <input type="hidden" value="{{.user.Id}}" name="id"/>
             <div class="form-row">
                 <label rel="username">用户名</label>
-                <input type="text" name="username" value="" id="username"/>
+                <input type="text" name="username" value="{{.user.Username}}" id="username" placeholder="请输入用户名" {{if eq .type "view"}} disabled {{end}}/>
             </div>
             <div class="form-row">
                 <label rel="password">密码</label>
-                <input type="text" name="password" value="" id="password"/>
+                <input type="text" name="password" value="{{.user.Password}}" id="password" {{if eq .type "view"}} disabled {{end}}/>
             </div>
             <div class="form-row">
                 <label rel="nickname">昵称</label>
-                <input type="text" name="nickname" value="" id="nickname"/>
+                <input type="text" name="nickname" value="{{.user.Nickname}}" id="nickname" {{if eq .type "view"}} disabled {{end}}/>
             </div>
             <div class="form-row">
                 <label rel="realname">真实姓名</label>
-                <input type="text" name="realname" value="" id="realname"/>
+                <input type="text" name="realname" value="{{.user.Realname}}" id="realname" {{if eq .type "view"}} disabled {{end}}/>
             </div>
             <div class="form-row">
                 <label rel="email">邮箱</label>
-                <input type="text" name="email" value="" id="email"/>
+                <input type="text" name="email" value="{{.user.Email}}" id="email" {{if eq .type "view"}} disabled {{end}}/>
             </div>
             <div class="form-row">
                 <label rel="mobile">手机</label>
-                <input type="text" name="mobile" value="" id="mobile"/>
+                <input type="text" name="mobile" value="{{.user.Mobile}}" id="mobile" {{if eq .type "view"}} disabled {{end}}/>
             </div>
-            <div class="form-row">
+            <div class="form-row update-b" {{if eq .type "view"}} style="display: none;" {{end}}>
                 <input type="reset" value="重置"/>
                 <input type="submit" value="提交"/>
             </div>
+            <div class="view-b" style="display: none;">
+                <input type="button" value="返回" id="backBtn"/>
+                <input type="button" value="修改" id="updateBtn"/>
+            </div>
         </form>
+
+        <script type="text/javascript">
+            $(function(){
+                {{if eq .type "view"}}
+                $(".view-b").show();
+                {{end}}
+
+                $("#backBtn").click(function(){
+                    window.location.href = "/user";
+                });
+                $("#updateBtn").click(function(){
+                    $(".view-b").hide();
+                    $(".update-b").show();
+                    $("input[type='text']").attr("disabled", false);
+                });
+            })();
+        </script>
     </body>
 </html>

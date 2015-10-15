@@ -39,15 +39,6 @@ func Route(serveMux *http.ServeMux, path string, router Router) error {
 }
 
 /*
- * 全局错误处理函数
- */
-func CheckError(err error) {
-	if err != nil {
-		panic(err)   //抛出异常
-	}
-}
-
-/*
  * 全局路由错误错误处理函数
  */
 func safeHandler(handlerFunc http.HandlerFunc) http.HandlerFunc {

@@ -12,7 +12,7 @@
             <p>用户列表</p>
             <a href="/user/add">添加</a>
         </div>
-        <table width="900px" border="0" cellpadding="0" cellspacing="0">
+        <table width="900px" border="1" cellpadding="10" cellspacing="0">
             <thead>
                 <tr>
                     <td>ID</td>
@@ -22,6 +22,7 @@
                     <td>真实名称</td>
                     <td>邮箱</td>
                     <td>手机</td>
+                    <td>创建时间</td>
                     <td>操作</td>
                 </tr>
             </thead>
@@ -35,12 +36,37 @@
                     <td>{{.Realname|html}}</td>
                     <td>{{.Email|html}}</td>
                     <td>{{.Mobile|html}}</td>
+                    <td>{{.CreateTime|html}}</td>
                     <td>
-
+                        <a href="/user/view?id={{.Id|urlquery}}" class="u-view">查看</a>
+                        <a href="/user/update?id={{.Id|urlquery}}" class="u-update">修改</a>
+                        <a href="#" src="/user/delete?id={{.Id|urlquery}}" class="u-del">删除</a>
                     </td>
                 </tr>
                 {{end}}
             </tbody>
         </table>
+
+        <script type="text/javascript">
+            $(function(){
+                $(".u-del").click(function(){
+                    var url = $(this).attr("src");
+                    $.ajax({
+                        url: url,
+                        data: null,
+                        dataType: "json",
+                        type: "get",
+                        success: function(data){
+                            if (data.Code == 0) {
+                                alert(data.Message);
+                                window.location.reload();
+                            } else {
+                                alert("删除失败");
+                            }
+                        }
+                    });
+                });
+            })();
+        </script>
     </body>
 </html>
