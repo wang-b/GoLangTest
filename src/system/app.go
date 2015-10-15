@@ -11,7 +11,7 @@ import (
 func NewServeMux() *http.ServeMux{
 	mux := http.NewServeMux()
 	staticResHandler(mux, config.STATIC_PREFIX, config.STATIC_DIR)
-	route(mux)
+	dispatchRouter(mux)
 
 	return mux
 }
@@ -33,7 +33,10 @@ func staticResHandler(mux *http.ServeMux, prefix string, staticDir string) {
 	})
 }
 
-func route(serveMux *http.ServeMux) {
+/*
+ * 分发路由器
+ */
+func dispatchRouter(serveMux *http.ServeMux) {
 	var rIndex router.Router
 	var rPicture router.Router
 	var rUser router.Router
