@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 	"encoding/json"
+	"./router"
 	. "../common"
 )
 
@@ -53,8 +54,8 @@ type UserRouter struct {
 
 }
 
-func (t *UserRouter) Routes() map[string]http.HandlerFunc {
-	routes := make(map[string]http.HandlerFunc);
+func (t *UserRouter) Routes() map[string]router.RouterHandler {
+	routes := make(map[string]router.RouterHandler);
 	routes["/"] = t.listHandler();
 	routes["/add"] = t.addHandler();
 	routes["/view"] = t.viewHandler();
@@ -63,8 +64,16 @@ func (t *UserRouter) Routes() map[string]http.HandlerFunc {
 	return routes;
 }
 
-func (t *UserRouter) listHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (r *UserRouter) Before(respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
+	log.Println("userRouter.before()...")
+}
+
+func (r *UserRouter) After(respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
+	log.Println("userRouter.after()...")
+}
+
+func (t *UserRouter) listHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		db, err := openDB();
 		defer db.Close()
 		CheckError(err)
@@ -115,8 +124,8 @@ func (t *UserRouter) listHandler() http.HandlerFunc {
 	}
 }
 
-func (t *UserRouter) addHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (t *UserRouter) addHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		if request.Method == "GET" {
 			renderer.RenderHtml(respWriter, "user/add", nil)
  		} else if request.Method == "POST" {
@@ -148,8 +157,8 @@ func (t *UserRouter) addHandler() http.HandlerFunc {
 	}
 }
 
-func (t *UserRouter) viewHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (t *UserRouter) viewHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		id := request.FormValue("id")
 		showType := request.FormValue("type")
 		log.Println("请求参数: id = ", id, "showType = ", showType)
@@ -171,8 +180,8 @@ func (t *UserRouter) viewHandler() http.HandlerFunc {
 	}
 }
 
-func (t *UserRouter) updateHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (t *UserRouter) updateHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		id := request.FormValue("id")
 		if request.Method == "GET" {
 			http.Redirect(respWriter, request, "/user/view?id=" + id + "&type=" + "update", http.StatusFound)
@@ -202,8 +211,8 @@ func (t *UserRouter) updateHandler() http.HandlerFunc {
 	}
 }
 
-func (t *UserRouter) deleteHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (t *UserRouter) deleteHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		userId := request.FormValue("id")
 
 		db, err := openDB()

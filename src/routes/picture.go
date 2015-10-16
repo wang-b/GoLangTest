@@ -11,6 +11,7 @@ import (
 	"../libs/utils"
 	"../config"
 	"strings"
+	"./router"
 	. "../common"
 )
 
@@ -18,16 +19,24 @@ type PictureRouter struct {
 
 }
 
-func (r *PictureRouter) Routes() map[string]http.HandlerFunc {
-	routes := make(map[string]http.HandlerFunc)
+func (r *PictureRouter) Routes() map[string]router.RouterHandler {
+	routes := make(map[string]router.RouterHandler)
 	routes["/upload"] = r.uploadHandler()
 	routes["/view"] = r.viewHandler()
 	routes["/delete"] = r.deleteHandler()
 	return  routes
 }
 
-func (r *PictureRouter) uploadHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (r *PictureRouter) Before(respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
+
+}
+
+func (r *PictureRouter) After(respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
+
+}
+
+func (r *PictureRouter) uploadHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		if request.Method == "GET" {
 			renderer.RenderHtml(respWriter, "upload", nil)
 		}
@@ -54,8 +63,8 @@ func (r *PictureRouter) uploadHandler() http.HandlerFunc {
 	}
 }
 
-func (r *PictureRouter) viewHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (r *PictureRouter) viewHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		imageId := request.FormValue("id")
 		imagePath := config.UPLOAD_DIR + "/" + imageId
 		if exists := utils.IsFileExists(imagePath); !exists {
@@ -68,8 +77,8 @@ func (r *PictureRouter) viewHandler() http.HandlerFunc {
 	}
 }
 
-func (r *PictureRouter)deleteHandler() http.HandlerFunc {
-	return func (respWriter http.ResponseWriter, request *http.Request) {
+func (r *PictureRouter)deleteHandler() router.RouterHandler {
+	return func (respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
 		imageId := request.FormValue("id");
 		imagePath := config.UPLOAD_DIR + "/" + imageId
 		if exists := utils.IsFileExists(imagePath); !exists {
