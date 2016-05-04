@@ -65,11 +65,11 @@ func (t *UserRouter) Routes() map[string]router.RouterHandler {
 }
 
 func (r *UserRouter) Before(respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
-	log.Println("userRouter.before()...")
+	log.Println("userRouter.Before()...")
 }
 
 func (r *UserRouter) After(respWriter http.ResponseWriter, request *http.Request, context *router.RouterContext) {
-	log.Println("userRouter.after()...")
+	log.Println("userRouter.After()...")
 }
 
 func (t *UserRouter) listHandler() router.RouterHandler {
